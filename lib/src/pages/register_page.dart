@@ -1,17 +1,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:crud/src/blocs/provider.dart';
-import 'package:crud/src/pages/home_page.dart';
-import './register_page.dart';
-import '../providers/usuario_provider.dart';
+import './login_page.dart';
+import 'package:crud/src/providers/usuario_provider.dart';
 import 'package:crud/src/utils/utils.dart' as utils;
 
 
-class LoginPage extends StatelessWidget {
+class RegisterPage extends StatelessWidget {
   
-  static final String routeName = 'login';
+  static final String routeName = 'register';
 
-  final usuarioProvider = new UsuarioProvider();
+  final usuarioProvider = UsuarioProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +169,7 @@ class LoginPage extends StatelessWidget {
             child: Column(
               children: <Widget>[
 
-                Text('Login',
+                Text('Registro',
                   style:  TextStyle(
                     fontSize: 18.0
                   )
@@ -202,8 +201,8 @@ class LoginPage extends StatelessWidget {
 
 
           FlatButton(
-            child: Text('Crear una nueva cuenta'),
-            onPressed: () => Navigator.pushReplacementNamed(context, RegisterPage.routeName ),
+            child: Text('Ir al login'),
+            onPressed: () => Navigator.pushReplacementNamed(context, LoginPage.routeName ),
           ),
 
 
@@ -302,7 +301,7 @@ class LoginPage extends StatelessWidget {
               horizontal: 50.0,
               vertical: 15.0
             ),
-            child: Text('Ingresar'),
+            child: Text('Registrarme'),
           ),
           // * BORDES
           shape: RoundedRectangleBorder(
@@ -314,26 +313,25 @@ class LoginPage extends StatelessWidget {
           textColor: Colors.white,
           // Si el sanpshot tiene información, retono el callback 
           // de lo contrario retorno null
-          onPressed: snapshot.hasData ? () => _login( bloc, context ) : (){},
+          onPressed: snapshot.hasData ? () => _register( bloc, context ) : (){},
         );
       },
     );    
 
   }
 
-  //* Obtener el ultimo valor del stream del email y password
-  _login( LoginBloc bloc, BuildContext context ) async {
+  
+  _register( LoginBloc bloc, BuildContext context ) async{
 
-    Map info = await usuarioProvider.login( bloc.email,  bloc.password );
+
+    Map info = await usuarioProvider.nuevoUsuario( bloc.email,  bloc.password );
+
 
     if ( info['ok'] ) {
-      Navigator.pushReplacementNamed(context, HomePage.routeName );
+      Navigator.pushReplacementNamed(context, LoginPage.routeName );
     } else {
       utils.mostrarAlerta( context, info['mensaje'] );
     }
-
-
-
 
 
   }
